@@ -1,12 +1,12 @@
 {
-  "name": "prisma-generator-typescript-interfaces",
-  "version": "1.4.0",
+  "name": "@zastix/prisma-generator-typescript-interfaces",
+  "version": "1.4.1",
   "description": "Generate zero-dependency Typescript interfaces from Prisma schema",
   "author": "Morgan Zolob",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mogzol/prisma-generator-typescript-interfaces"
+    "url": "git+https://github.com/BlacketPS/prisma-generator-typescript-interfaces.git"
   },
   "type": "module",
   "main": "generator.js",
@@ -35,7 +35,6 @@
     "@typescript-eslint/parser": "^6.14.0",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
-    "husky": "^8.0.3",
     "prettier": "^3.1.1",
     "prisma": "^5.7.0",
     "rimraf": "^5.0.5",
@@ -49,5 +48,12 @@
     "interface",
     "json",
     "dto"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/BlacketPS/prisma-generator-typescript-interfaces/issues"
+  },
+  "homepage": "https://github.com/BlacketPS/prisma-generator-typescript-interfaces#readme",
+  "directories": {
+    "test": "tests"
+  }
 }
