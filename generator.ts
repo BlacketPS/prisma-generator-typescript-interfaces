@@ -15,7 +15,7 @@ interface Config {
   typeSuffix: string;
   headerComment: string;
   modelType: "interface" | "type";
-  enumType: "stringUnion" | "enum";
+  enumType: "stringUnion" | "enum" | "both";
   dateType: "Date" | "string" | "number";
   bigIntType: "bigint" | "string" | "number";
   decimalType: "Decimal" | "string" | "number";
@@ -52,7 +52,7 @@ function validateConfig(config: Config) {
   if (!["interface", "type"].includes(config.modelType)) {
     errors.push(`Invalid modelType: ${config.modelType}`);
   }
-  if (!["stringUnion", "enum"].includes(config.enumType)) {
+  if (!["stringUnion", "enum", "both"].includes(config.enumType)) {
     errors.push(`Invalid enumType: ${config.enumType}`);
   }
   if (!["Date", "string", "number"].includes(config.dateType)) {
@@ -87,6 +87,11 @@ function getEnumTs(
       const enumValues = enumData.values.map(({ name }) => `"${name}"`).join(" | ");
       return `export type ${enumNameMap.get(enumData.name)} = ${enumValues};`;
     }
+    case "both": {
+      const enumEnumValues = enumData.values.map(({ name }) => `  ${name} = "${name}"`).join(",\n");
+      const enumUnionValues = enumData.values.map(({ name }) => `"${name}"`).join(" | ");
+      return `export enum ${enumNameMap.get(enumData.name)}Enum {\n${enumEnumValues}\n}\n` + `export type ${enumNameMap.get(enumData.name)} = ${enumUnionValues};`;
+    }
     default:
       throw new Error(`Unknown enumType: ${config.enumType}`);
   }
@@ -104,8 +109,7 @@ function getModelTs(
   const fields = modelData.fields
     .map(({ name, kind, type, isRequired, isList }) => {
       const getDefinition = (resolvedType: string, optional = false) =>
-        `  ${name}${optional ? "?" : ""}: ${resolvedType}${isList ? "[]" : ""}${
-          !isRequired ? " | null" : ""
+        `  ${name}${optional ? "?" : ""}: ${resolvedType}${isList ? "[]" : ""}${!isRequired ? " | null" : ""
         };`;
 
       switch (kind) {
