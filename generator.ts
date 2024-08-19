@@ -90,7 +90,10 @@ function getEnumTs(
     case "both": {
       const enumEnumValues = enumData.values.map(({ name }) => `  ${name} = "${name}"`).join(",\n");
       const enumUnionValues = enumData.values.map(({ name }) => `"${name}"`).join(" | ");
-      return `export enum ${enumNameMap.get(enumData.name)}Enum {\n${enumEnumValues}\n}\n` + `export type ${enumNameMap.get(enumData.name)} = ${enumUnionValues};`;
+      return (
+        `export enum ${enumNameMap.get(enumData.name)}Enum {\n${enumEnumValues}\n}\n` +
+        `export type ${enumNameMap.get(enumData.name)} = ${enumUnionValues};`
+      );
     }
     default:
       throw new Error(`Unknown enumType: ${config.enumType}`);
@@ -109,7 +112,8 @@ function getModelTs(
   const fields = modelData.fields
     .map(({ name, kind, type, isRequired, isList }) => {
       const getDefinition = (resolvedType: string, optional = false) =>
-        `  ${name}${optional ? "?" : ""}: ${resolvedType}${isList ? "[]" : ""}${!isRequired ? " | null" : ""
+        `  ${name}${optional ? "?" : ""}: ${resolvedType}${isList ? "[]" : ""}${
+          !isRequired ? " | null" : ""
         };`;
 
       switch (kind) {
